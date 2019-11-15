@@ -1,0 +1,39 @@
+{
+  "name": "@waves/node-state",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "bin": {
+    "node-state": "dist/cli.js"
+  },
+  "scripts": {
+    "prepare": "tsc",
+    "postversion": "npm publish"
+  },
+  "author": {
+    "email": "tsddaniil@gmail.com",
+    "name": "Tsigel"
+  },
+  "repository": {
+    "url": "https://github.com/wavesplatform/node-state",
+    "type": "git"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.7.2"
+  },
+  "files": [
+    "dist",
+    "env"
+  ],
+  "dependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/fs-extra": "^8.0.1",
+    "@types/yargs": "^13.0.3",
+    "@waves/ts-types": "^0.3.1",
+    "@waves/waves-transactions": "^3.24.0",
+    "dotenv": "^8.2.0",
+    "fs-extra": "^8.1.0",
+    "yargs": "^14.2.0"
+  }
+}

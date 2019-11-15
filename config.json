@@ -1,0 +1,40 @@
+{
+    "ASSETS": {
+        "BTC": {
+            "name": "WBTC"
+        },
+        "USD": {
+            "name": "WUSD"
+        },
+        "EUR": {
+            "name": "WEUR"
+        },
+        "ETH": {
+            "name": "WETH"
+        },
+        "SMART": {
+            "name": "Smart",
+            "script": true
+        }
+    },
+    "ACCOUNTS": {
+        "FOR_SCRIPT": {
+            "script": "dApp"
+        },
+        "SIMPLE": {
+            "alias": true,
+            "balance": {
+                "BTC": 10000000000,
+                "SMART": 10000000000
+            }
+        },
+        "SMART": {
+            "script": true,
+            "alias": true,
+            "balance": {
+                "BTC": 10000000000,
+                "SMART": 10000000000
+            }
+        }
+    }
+}

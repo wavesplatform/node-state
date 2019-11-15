@@ -20,6 +20,25 @@ Options:
   --explorer, -e  Need up explorer (port 3000)                         [boolean]
 ```
 
+### Usage example
+
+#### Step 1. Up the node and create the state
+`node-state -n -m typescript -o ./tests/state.ts`;
+#### Step 2. Write some tests with some test framework
+```typescript
+import { NODE_URL, STATE, CHAIN_ID, MASTER_ACCOUNT } from './test/state.ts';
+import { transfer, broadcast, waitForTx } from '@waves/waves-transactions';
+
+it('Create transfer transaction', async () => {
+    const tx = transfer({ 
+        recipient: `alias:${CHAIN_ID}:${MASTER_ACCOUNT.ALIAS}`,
+        amount: 1000
+    }, STATE.ACCOUNTS.SIMPLE.seed);
+    await broadcast(tx);
+    await waitForTx(tx.id, { apiBase: NODE_URL }); // Transaction broadcast success!
+});
+```
+
 ### Custom config properties
 
 ```json5

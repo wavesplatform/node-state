@@ -24,11 +24,13 @@ const { out, config, mode, node, explorer } = options({
     },
     node: {
         type: 'boolean',
-        alias: 'n'
+        alias: 'n',
+        default: false
     },
     explorer: {
         type: 'boolean',
-        alias: 'e'
+        alias: 'e',
+        default: false
     },
     // log: {
     //     type: 'string',

@@ -2,7 +2,7 @@
 
 ### install
 
-`nom install @waves/node-state -D`
+`npm install @waves/node-state -D`
 
 ### Usage
 

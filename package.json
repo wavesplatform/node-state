@@ -24,7 +24,8 @@
   },
   "files": [
     "dist",
-    "env"
+    "env",
+    "config.json"
   ],
   "dependencies": {
     "@types/dotenv": "^8.2.0",

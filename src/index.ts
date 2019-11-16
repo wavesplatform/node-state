@@ -16,6 +16,12 @@ export async function write(options: IOptions) {
     const ASSETS = await createAssets(state.ASSETS || {});
     const ACCOUNTS = await createAccounts(state.ACCOUNTS || {}, ASSETS);
 
+    console.info('Success create state!');
+
+    if (!options.out) {
+        return undefined;
+    }
+
     if (options.mode === 'json') {
         await outputFile(options.out, JSON.stringify({
             ACCOUNTS,
@@ -52,7 +58,7 @@ const tsTemplate = (state: any) => [
 ].join('\n');
 
 export interface IOptions {
-    out: string;
+    out: string | undefined;
     config: string;
-    mode: 'json' | 'typesctipt';
+    mode: 'json' | 'typescript';
 }

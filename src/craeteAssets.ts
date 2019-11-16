@@ -2,10 +2,12 @@ import { TAssetsResponse, IAsset } from './interface';
 import { CHAIN_ID, MASTER_ACCOUNT_SEED, SMART_ASSET_SCRIPT } from './constants';
 import { broadcastAndWait } from './utils';
 import { issue } from '@waves/waves-transactions';
+import console from './console';
 
 
 export default function <ASSETS extends Record<string, IAsset>>(assets: ASSETS): TAssetsResponse<ASSETS> {
     return Promise.all(Object.entries(assets).map(async ([key, asset]) => {
+        console.log(`Create asset ${key}`);
 
         const tx = issue({
             chainId: CHAIN_ID,

@@ -3,10 +3,12 @@ import { libs } from '@waves/waves-transactions';
 import { CHAIN_ID, MASTER_ACCOUNT_SEED, ACCOUNT_SCRIPT, DAP_SCRIPT } from './constants';
 import { broadcastAndWait } from './utils';
 import { transfer, setScript, alias } from '@waves/waves-transactions';
+import console from './console';
 
 
 export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends Record<string, IAccount<ASSETS>>>(accounts: ACCOUNTS, assets: TAssetsResponse<ASSETS>): TAccountsResponse<ASSETS, ACCOUNTS> {
     return Promise.all(Object.entries(accounts).map(async ([key, account]) => {
+
         const seed = account.seed || libs.crypto.randomSeed();
         const address = libs.crypto.address(seed, CHAIN_ID);
         const publicKey = libs.crypto.publicKey(seed);
@@ -36,7 +38,6 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
         }
 
         if (userAlias) {
-
             const tx = alias({
                 chainId: CHAIN_ID,
                 alias: userAlias,

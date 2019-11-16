@@ -34,9 +34,9 @@ export function isRunImage(image: string): Promise<boolean> {
     return stats().then(list => list.filter(item => item.image === image).length !== 0);
 }
 
-export function run(command: string, args: Array<string>, image: string) {
+export function run(args: Array<string>, image: string) {
     return stop(image).then(() => remove(image))
-        .then(() => utilsRun(command, [...args, image]));
+        .then(() => utilsRun('docker', ['run', ...args, image]));
 }
 
 export function stats(flags: Array<'-a'> = []): Promise<Array<IImageInfo>> {

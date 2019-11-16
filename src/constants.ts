@@ -4,7 +4,7 @@ import { join } from 'path';
 
 config({
     path: join(__dirname, '../env/.env.custom')
-})
+});
 
 export const MASTER_ACCOUNT_SEED = process.env.MASTER_ACCOUNT_SEED as string;
 export const NODE_URL = process.env.NODE_API_HOST as string;

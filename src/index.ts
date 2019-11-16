@@ -1,8 +1,9 @@
 import { outputFile, readFile } from 'fs-extra';
 import { alias, broadcast, libs } from '@waves/waves-transactions';
-import { CHAIN_ID, MASTER_ACCOUNT_SEED, NODE_URL } from './constants';
+import { ACCOUNT_SCRIPT, CHAIN_ID, DAP_SCRIPT, MASTER_ACCOUNT_SEED, NODE_URL, SMART_ASSET_SCRIPT } from './constants';
 import createAssets from './craeteAssets';
 import createAccounts from './createAccounts';
+import console from './console';
 
 
 export async function write(options: IOptions) {
@@ -34,7 +35,10 @@ export async function write(options: IOptions) {
             },
             'NODE_URL': NODE_URL,
             'CHAIN_ID': CHAIN_ID,
-            'NETWORK_BYTE': CHAIN_ID.charCodeAt(0)
+            'NETWORK_BYTE': CHAIN_ID.charCodeAt(0),
+            'SMART_ASSET_SCRIPT': SMART_ASSET_SCRIPT,
+            'DAP_SCRIPT': DAP_SCRIPT,
+            'ACCOUNT_SCRIPT': ACCOUNT_SCRIPT,
         }, null, 4));
     } else {
         await outputFile(options.out, tsTemplate({ ACCOUNTS, ASSETS }));
@@ -53,6 +57,9 @@ const tsTemplate = (state: any) => [
     exportConstant('NODE_URL', NODE_URL),
     exportConstant('CHAIN_ID', CHAIN_ID),
     exportConstant('NETWORK_BYTE', CHAIN_ID.charCodeAt(0)),
+    exportConstant('SMART_ASSET_SCRIPT', SMART_ASSET_SCRIPT),
+    exportConstant('DAP_SCRIPT', DAP_SCRIPT),
+    exportConstant('ACCOUNT_SCRIPT', ACCOUNT_SCRIPT),
     '',
     exportState(state),
 ].join('\n');

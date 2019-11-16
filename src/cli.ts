@@ -5,7 +5,8 @@ import { CHAIN_ID, MASTER_ACCOUNT_SEED, NODE_URL } from './constants';
 import { write } from './index';
 import console from './console';
 import { isRunImage, run } from './docker';
-import { config, mode, out, upExplorer, upNode } from './args';
+import { run as runCommand } from './utils';
+import { config, mode, out, runTests, upExplorer, upNode } from './args';
 
 
 const NODE_IMAGE = 'wavesplatform/waves-private-node';
@@ -47,6 +48,19 @@ const apply = () => {
         config: config ? join(process.cwd(), config) : DEFAULT_CONFIG,
         out: out ? join(process.cwd(), out) : undefined,
         mode
+    }).then(async () => {
+        if (!runTests) {
+            return void 0;
+        }
+
+        // TODO add check test command
+        const child = runCommand('npm', ['run', 'testCommand'], {
+            log: console.warn,
+        });
+
+        child.on('exit', code => {
+            process.exit(code || 0);
+        });
     });
 };
 
@@ -55,22 +69,30 @@ if (upNode) {
     console.info(`MASTER_ACCOUNT_SEED ${MASTER_ACCOUNT_SEED}`);
     console.info(`CHAIN_ID ${CHAIN_ID}`);
 
-    run('docker', [
-        'run', '-p', '6869:6869',
-        '--network=ds', '--name=node'
-    ], NODE_IMAGE).then(node => {
+    isRunImage(NODE_IMAGE)
+        .then(state => {
 
-        node.stdout.on('data', chunk => {
-            const message = String(chunk);
-            if (message.includes('REST API was bound')) {
-                console.info('REST API was bound');
+            if (state) {
                 return apply();
             }
+
+            run('docker', [
+                'run', '-p', '6869:6869',
+                '--network=ds', '--name=node'
+            ], NODE_IMAGE).then(node => {
+
+                node.stdout.on('data', chunk => {
+                    const message = String(chunk);
+                    if (message.includes('REST API was bound')) {
+                        console.info('REST API was bound');
+                        return apply();
+                    }
+                });
+            });
         });
-    });
 } else {
     isRunImage(NODE_IMAGE)
-        .then(apply, () => Promise.reject('Up the instance of node before create state!'));
+        .then(state => state ? apply() : Promise.reject('Up the instance of node before create state!'));
 }
 
 if (upExplorer) {

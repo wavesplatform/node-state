@@ -30,6 +30,10 @@ const data = options({
         alias: 'e',
         default: false
     },
+    runTests: {
+        type: 'boolean',
+        alias: 'r'
+    },
     verbose: {
         type: 'boolean'
     }
@@ -41,4 +45,5 @@ export const mode = data.mode as 'json' | 'typescript';
 export const upNode = data.upNode;
 export const upExplorer = data.upExplorer;
 export const upDataService = data.upDataService;
+export const runTests = data.runTests;
 console.level = data.verbose ? 'verbose' : 'errors';

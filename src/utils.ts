@@ -1,6 +1,6 @@
 import { broadcast, waitForTx } from '@waves/waves-transactions';
 import { NODE_URL } from './constants';
-import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
+import { ChildProcessWithoutNullStreams, spawn, SpawnOptionsWithoutStdio } from 'child_process';
 import console from './console';
 
 
@@ -13,17 +13,20 @@ export async function broadcastAndWait(tx: any): Promise<any> {
     }
 }
 
-export const run = (command: string, args: Array<string>): ChildProcessWithoutNullStreams => {
+type TFunc = (...args: Array<any>) => void;
+export const run = (command: string, args: Array<string>, options?: { log?: TFunc, error?: TFunc }): ChildProcessWithoutNullStreams => {
     console.info(`${command} ${args.join(' ')}`);
 
+    const log = options && options.log || console.log;
+    const error = options && options.error || console.error;
     const process = spawn(command, args);
 
     process.stdout.on('data', data => {
-        console.log(String(data));
+        log(String(data));
     });
 
     process.stderr.on('data', data => {
-        console.error(data);
+        error(data);
     });
 
     process.on('close', (code) => {
@@ -33,12 +36,13 @@ export const run = (command: string, args: Array<string>): ChildProcessWithoutNu
     return process;
 };
 
-export const exec = (command: string, args: Array<string>): Promise<string> => {
+export const exec = (command: string, args: Array<string>, options?: SpawnOptionsWithoutStdio): Promise<string> => {
+
     console.info(`Exec "${command} ${args.join(' ')}"`);
 
     let data = '';
 
-    const process = spawn(command, args);
+    const process = spawn(command, args, options);
 
     process.stdout.on('data', chunk => {
         data += chunk;

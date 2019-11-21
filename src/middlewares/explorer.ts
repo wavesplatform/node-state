@@ -1,5 +1,5 @@
 import { NODE_URL, WAVES_EXPLORER_PORT } from '../constants';
-import { run } from '../docker';
+import { run } from '../utils/docker';
 
 const EXPLORER_IMAGE = 'wavesplatform/explorer';
 

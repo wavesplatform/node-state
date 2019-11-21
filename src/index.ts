@@ -1,9 +1,9 @@
 import { outputFile, readFile } from 'fs-extra';
 import { alias, broadcast, libs } from '@waves/waves-transactions';
 import { ACCOUNT_SCRIPT, CHAIN_ID, DAP_SCRIPT, MASTER_ACCOUNT_SEED, NODE_URL, SMART_ASSET_SCRIPT } from './constants';
-import createAssets from './craeteAssets';
-import createAccounts from './createAccounts';
-import console from './console';
+import createAssets from './state/craeteAssets';
+import createAccounts from './state/createAccounts';
+import console from './utils/console';
 
 
 export async function write(options: IOptions) {

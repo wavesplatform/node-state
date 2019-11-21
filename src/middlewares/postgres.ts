@@ -1,5 +1,5 @@
 import { DOCKER_NETWORK } from '../constants';
-import { run } from '../docker';
+import { run } from '../utils/docker';
 
 const IMAGE = 'postgres:alpine';
 

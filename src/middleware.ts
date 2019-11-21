@@ -12,27 +12,28 @@ const isNext = Symbol('isNext');
  * the middleware, currently `left-to-right`, returning a new `async` function.
  */
 export const middlewareWithContext = (...mw: any) =>
-  async function(...args: any) {
-    /**
-     * The last `next` in the chain, should either call the `next` handler
-     * passed via `args` (denoting a continuation into another composition),
-     * or do a no-op.
-     */
-    const nxt = args[args.length - 1][isNext] ? args.pop() : () => {};
-    /**
-     * `await` execution of all the middleware provided, by reducing each
-     * supplied middleware and wrapping each function execution.
-     */
-    await mw.reduceRight(
-      (next: any, curr: any) =>
-        async function() {
-          /**
-           * Decorate each `next` handler with our `isNext` symbol to facilitate
-           * composition of compositions.
-           */
-          next[isNext] = true;
-          await curr(...args.concat(next));
-        },
-      nxt
-    )();
-  };
+    async function (...args: any) {
+        /**
+         * The last `next` in the chain, should either call the `next` handler
+         * passed via `args` (denoting a continuation into another composition),
+         * or do a no-op.
+         */
+        const nxt = args[args.length - 1][isNext] ? args.pop() : () => {
+        };
+        /**
+         * `await` execution of all the middleware provided, by reducing each
+         * supplied middleware and wrapping each function execution.
+         */
+        await mw.reduceRight(
+            (next: any, curr: any) =>
+                async function () {
+                    /**
+                     * Decorate each `next` handler with our `isNext` symbol to facilitate
+                     * composition of compositions.
+                     */
+                    next[isNext] = true;
+                    await curr(...args.concat(next));
+                },
+            nxt
+        )();
+    };

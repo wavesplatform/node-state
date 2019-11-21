@@ -1,4 +1,4 @@
-import { exec, run as utilsRun } from './utils';
+import { exec, run as utilsRun } from '../utils';
 import console from './console';
 
 

@@ -1,5 +1,5 @@
 import { NODE_API_PORT, DOCKER_NETWORK } from '../constants';
-import { run } from '../docker';
+import { run } from '../utils/docker';
 
 const IMAGE = 'wavesplatform/blockchain-postgres-sync';
 

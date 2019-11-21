@@ -1,7 +1,7 @@
 import { broadcast, waitForTx } from '@waves/waves-transactions';
 import { NODE_URL } from './constants';
 import { ChildProcessWithoutNullStreams, spawn, SpawnOptionsWithoutStdio } from 'child_process';
-import console from './console';
+import console from './utils/console';
 
 
 export async function broadcastAndWait(tx: any): Promise<any> {
@@ -9,13 +9,13 @@ export async function broadcastAndWait(tx: any): Promise<any> {
         await broadcast(tx, NODE_URL);
         await waitForTx(tx.id, { apiBase: NODE_URL });
     } catch (e) {
-        console.error(`Can't send transaction! ${JSON.stringify(tx, null, 4)}`);
+        console.error(`Can't send transaction! ${JSON.stringify(tx, null, 4)}` + '\n' + `Error: ${e.message}`);
     }
 }
 
 type TFunc = (...args: Array<any>) => void;
 export const run = (command: string, args: Array<string>, options?: { log?: TFunc, error?: TFunc }): ChildProcessWithoutNullStreams => {
-    console.info(`${command} ${args.join(' ')}`);
+    console.log(`${command} ${args.join(' ')}`);
 
     const log = options && options.log || console.log;
     const error = options && options.error || console.error;
@@ -37,8 +37,7 @@ export const run = (command: string, args: Array<string>, options?: { log?: TFun
 };
 
 export const exec = (command: string, args: Array<string>, options?: SpawnOptionsWithoutStdio): Promise<string> => {
-
-    console.info(`Exec "${command} ${args.join(' ')}"`);
+    console.log(`Exec "${command} ${args.join(' ')}"`);
 
     let data = '';
 

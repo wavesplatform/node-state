@@ -1,5 +1,5 @@
 import { DATA_SERVICE_API_PORT, DOCKER_NETWORK } from '../constants';
-import { run } from '../docker';
+import { run } from '../utils/docker';
 
 const IMAGE = 'wavesplatform/data-service';
 

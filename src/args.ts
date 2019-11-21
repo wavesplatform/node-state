@@ -1,5 +1,5 @@
 import { options } from 'yargs';
-import console from './console';
+import console from './utils/console';
 
 const data = options({
     out: {

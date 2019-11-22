@@ -1,0 +1,73 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: blockchain
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres-data:/var/lib/postgresql
+  crawler:
+    image: wavesplatform/blockchain-postgres-sync
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      NODE_ADDRESS: 'nodes.wavesnodes.com'
+      PGHOST: 'postgres'
+      PGPORT: 5432
+      PGDATABASE: 'blockchain'
+      PGUSER: 'postgres'
+      PGPASSWORD: 'postgres'
+      MIGRATE: 'true'
+  data-service:
+    image: wavesplatform/data-service
+    restart: always
+    depends_on:
+      - crawler
+    environment:
+      PORT: 3000
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: blockchain
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGPOOLSIZE: 20
+      LOG_LEVEL: info
+      DEFAULT_MATCHER: 3PJaDyprvekvPXPuAtxrapacuDJopgJRaU3
+      MATCHER_SETTINGS_URL: https://matcher.wavesplatform.com/matcher/settings
+    ports:
+      - '3000:3000'
+  pairs:
+    image: wavesplatform/data-service-pairs
+    restart: always
+    depends_on:
+      - crawler
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: blockchain
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      LOG_LEVEL: info
+      PAIRS_UPDATE_INTERVAL: 2500
+      PAIRS_UPDATE_TIMEOUT: 20000
+  candles:
+    image: wavesplatform/data-service-candles
+    restart: always
+    depends_on:
+      - crawler
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: blockchain
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      LOG_LEVEL: info
+      CANDLES_UPDATE_INTERVAL: 2500
+      CANDLES_UPDATE_TIMEOUT: 20000
+      RECALCULATE_ALL_CANDLES_ON_START: "false"

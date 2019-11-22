@@ -1,70 +1,23 @@
 #!/usr/bin/env node
 
-import { spawn } from 'child_process';
-import { options } from 'yargs';
-import { join } from 'path';
-import { write } from './index';
+import { middlewareWithContext } from './middleware';
 
+import checkDockerNetwork from './middlewares/checkDockerNetwork';
+import node from './middlewares/node';
+import explorer from './middlewares/explorer';
+import postgres from './middlewares/postgres';
+import crawler from './middlewares/crawler';
+import dataService from './middlewares/dataService';
+import apply from './middlewares/apply';
 
-const { out, config, mode, node, explorer } = options({
-    out: {
-        type: 'string',
-        alias: 'o',
-        required: true
-    },
-    config: {
-        type: 'string',
-        alias: 'c'
-    },
-    mode: {
-        type: 'string',
-        alias: 'm',
-        choices: ['json', 'typescript'],
-        default: 'json'
-    },
-    node: {
-        type: 'boolean',
-        alias: 'n',
-        default: false
-    },
-    explorer: {
-        type: 'boolean',
-        alias: 'e',
-        default: false
-    },
-    // log: {
-    //     type: 'string',
-    //     alias: 'l',
-    //     choises: ['all', 'state', 'node'],
-    //     default: 'all'
-    // }
-}).argv;
+import { upNode, upExplorer, upDataService } from './args';
 
-const defaultConfig = join(__dirname, '..', 'config.json');
-const apply = () => write({
-    config: config ? join(process.cwd(), config) : defaultConfig,
-    out: join(process.cwd(), out),
-    mode: mode as 'json' | 'typesctipt'
-});
+const middlewares = [checkDockerNetwork];
 
-if (node) {
-    const workerNode = spawn('docker', ['run', '-p', '6869:6869', 'wavesplatform/waves-private-node']);
+if (upNode) middlewares.push(node);
+if (upExplorer) middlewares.push(explorer);
+if (upDataService) middlewares.push(postgres, crawler, dataService);
 
-    workerNode.stdout.on('data', buffer => {
-        const message = String(buffer);
-        console.log(`Worker Node: ${message}`);
-        if (message.includes('REST API was bound')) {
-            apply();
-        }
-    });
-} else {
-    apply();
-}
+middlewares.push(apply);
 
-if (explorer) {
-    const workerNode = spawn('docker', ['run', '-e', 'API_NODE_URL=http://localhost:6869', '-e', 'NODE_LIST=http://localhost:6869', '-p', '3000:8080', 'wavesplatform/explorer']);
-
-    workerNode.stdout.on('data', data => {
-        console.log(`Worker Explorer: ${data}`);
-    });
-}
+middlewareWithContext(...middlewares)({});

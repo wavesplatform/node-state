@@ -1,6 +1,6 @@
 import { IAccount, IAsset, TAccountsResponse, TAssetsResponse } from '../interface';
-import { alias, data, libs, setScript, transfer } from '@waves/waves-transactions';
-import { ACCOUNT_SCRIPT, CHAIN_ID, DAP_SCRIPT, MASTER_ACCOUNT_SEED } from '../constants';
+import { alias, data, libs, nodeInteraction, setScript, transfer } from '@waves/waves-transactions';
+import { ACCOUNT_SCRIPT, CHAIN_ID, DAP_SCRIPT, MASTER_ACCOUNT_SEED, NODE_URL } from '../constants';
 import { broadcastAndWait } from '../utils';
 import console from '../utils/console';
 
@@ -49,6 +49,11 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
             const script = typeof account.script === 'boolean' ? ACCOUNT_SCRIPT : account.script === 'dApp' ? DAP_SCRIPT : account.script;
             await addScript(seed, script);
         }
+
+        const { available } = await nodeInteraction.balanceDetails(address, NODE_URL);
+        const toSend = 100 * Math.pow(10, 8) - available;
+
+        await setBalance(address, toSend);
 
         return {
             [key]: {

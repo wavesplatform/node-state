@@ -39,7 +39,7 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
             await Promise.all(Object.entries(account.data).map(async ([key, { type, value }]) => {
                 const tx = data({
                     data: [{ key, type, value }]
-                } as any);
+                } as any, seed);
 
                 await broadcastAndWait(tx);
             }));
@@ -47,11 +47,18 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
 
         if (account.script) {
             const script = typeof account.script === 'boolean' ? ACCOUNT_SCRIPT : account.script === 'dApp' ? DAP_SCRIPT : account.script;
-
             await addScript(seed, script);
         }
 
-        return { [key]: { seed, alias: userAlias, address, publicKey, scripted: !!account.script } };
+        return {
+            [key]: {
+                seed,
+                alias: userAlias,
+                address, publicKey,
+                scripted: !!account.script,
+                data: account.data
+            }
+        };
     }))
         .then(list =>
             list.reduce((acc, item) => Object.assign(acc, item), Object.create(null))) as any;

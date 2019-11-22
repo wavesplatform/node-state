@@ -26,6 +26,16 @@
             "balance": {
                 "BTC": 10000000000,
                 "SMART": 10000000000
+            },
+            "data": {
+                "key": {
+                    "value": "123",
+                    "type": "string"
+                },
+                "count": {
+                    "value": 1,
+                    "type": "integer"
+                }
             }
         },
         "SMART": {

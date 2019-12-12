@@ -29,12 +29,6 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
             await broadcastAndWait(tx);
         }
 
-        if (account.balance) {
-            await Promise.all(Object.entries(account.balance).map(async ([name, count]) => {
-                await setBalance(address, count as number, assets[name].id);
-            }));
-        }
-
         if (account.data) {
             await Promise.all(Object.entries(account.data).map(async ([key, { type, value }]) => {
                 const tx = data({

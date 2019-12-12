@@ -1,10 +1,11 @@
 import { outputFile, readFile } from 'fs-extra';
 import { alias, broadcast, libs } from '@waves/waves-transactions';
 import { ACCOUNT_SCRIPT, CHAIN_ID, DAP_SCRIPT, MASTER_ACCOUNT_SEED, NODE_URL, SMART_ASSET_SCRIPT } from './constants';
-import createAssets from './state/craeteAssets';
+import createAssets from './state/createAssets';
 import createAccounts from './state/createAccounts';
 import console from './utils/console';
 import setSponsorship from './state/setSponsorship';
+import setBalances from './state/setBalances';
 
 
 export async function write(options: IOptions) {
@@ -15,8 +16,9 @@ export async function write(options: IOptions) {
         .catch(() => null);
 
     const state = JSON.parse(await readFile(options.config, 'utf8'));
-    const ASSETS = await createAssets(state.ASSETS || {});
-    const ACCOUNTS = await createAccounts(state.ACCOUNTS || {}, ASSETS);
+    const ACCOUNTS = await createAccounts(state.ACCOUNTS || {}, {});
+    const ASSETS = await createAssets(state.ASSETS || {}, ACCOUNTS);
+    await setBalances(state.ACCOUNTS || {}, ASSETS, ACCOUNTS);
     const SPONSORSHIPS = await setSponsorship(state.ASSETS || {}, ASSETS, ACCOUNTS);
 
     console.info('Success create state!');

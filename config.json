@@ -18,9 +18,8 @@
         },
         "DUMB": {
             "name": "Dumb",
-            "sponsorship": {
-                "owner": "FOR_SCRIPT"
-            }
+            "owner": "SIMPLE",
+            "sponsorship": true
         }
     },
     "ACCOUNTS": {

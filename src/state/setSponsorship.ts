@@ -9,7 +9,7 @@ export default function <STATE_ASSETS extends Record<string, IAsset>,
     ACCOUNTS extends TAccountsResponse<Record<string, IAsset>, Record<string, IAccount<Record<string, IAsset>>>>>
 (stateAssets: STATE_ASSETS, assets: ASSETS, accounts: ACCOUNTS): any {
     const sponsorshipAssets: STATE_ASSETS = Object.keys(stateAssets).reduce((acc, assetsKey) => (
-        !!stateAssets[assetsKey].sponsorship ? Object.assign(acc, { [assetsKey]: stateAssets[assetsKey] } ) : acc
+        stateAssets[assetsKey].sponsorship ? Object.assign(acc, { [assetsKey]: stateAssets[assetsKey] } ) : acc
     ), Object.create(null));
 
     return Promise.all(Object.entries(sponsorshipAssets).map(async ([key, asset]) => {
@@ -18,7 +18,7 @@ export default function <STATE_ASSETS extends Record<string, IAsset>,
         const tx = sponsorship({
             assetId: assets[key].id,
             minSponsoredAssetFee: 1,
-        }, MASTER_ACCOUNT_SEED);
+        }, asset.owner ? accounts[asset.owner].seed : MASTER_ACCOUNT_SEED);
 
         await broadcastAndWait(tx);
 

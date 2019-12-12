@@ -22,6 +22,7 @@ export interface IAsset {
     description?: string;
     reissuable?: boolean;
     script?: boolean | string | undefined;
+    sponsorship?: Record<string, { owner: string }>
 }
 
 export type TAssetsResponse<ASSETS extends Record<string, IAsset>> = { [Key in keyof ASSETS]: TTransactionFromAPIMap<TLong>[3] };

@@ -4,6 +4,7 @@ import { ACCOUNT_SCRIPT, CHAIN_ID, DAP_SCRIPT, MASTER_ACCOUNT_SEED, NODE_URL, SM
 import createAssets from './state/craeteAssets';
 import createAccounts from './state/createAccounts';
 import console from './utils/console';
+import setSponsorship from './state/setSponsorship';
 
 
 export async function write(options: IOptions) {
@@ -16,6 +17,7 @@ export async function write(options: IOptions) {
     const state = JSON.parse(await readFile(options.config, 'utf8'));
     const ASSETS = await createAssets(state.ASSETS || {});
     const ACCOUNTS = await createAccounts(state.ACCOUNTS || {}, ASSETS);
+    const SPONSORSHIPS = await setSponsorship(state.ASSETS || {}, ASSETS, ACCOUNTS);
 
     console.info('Success create state!');
 
@@ -27,6 +29,7 @@ export async function write(options: IOptions) {
         await outputFile(options.out, JSON.stringify({
             ACCOUNTS,
             ASSETS,
+            SPONSORSHIPS,
             MASTER_ACCOUNT: {
                 SEED: MASTER_ACCOUNT_SEED,
                 ADDRESS: libs.crypto.address(MASTER_ACCOUNT_SEED, CHAIN_ID),
@@ -41,7 +44,7 @@ export async function write(options: IOptions) {
             'ACCOUNT_SCRIPT': ACCOUNT_SCRIPT,
         }, null, 4));
     } else {
-        await outputFile(options.out, tsTemplate({ ACCOUNTS, ASSETS }));
+        await outputFile(options.out, tsTemplate({ ACCOUNTS, ASSETS, SPONSORSHIPS }));
     }
 }
 

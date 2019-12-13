@@ -15,6 +15,11 @@
         "SMART": {
             "name": "Smart",
             "script": true
+        },
+        "DUMB": {
+            "name": "Dumb",
+            "owner": "SIMPLE",
+            "sponsorship": true
         }
     },
     "ACCOUNTS": {

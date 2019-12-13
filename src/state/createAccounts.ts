@@ -5,7 +5,7 @@ import { broadcastAndWait } from '../utils';
 import console from '../utils/console';
 
 
-export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends Record<string, IAccount<ASSETS>>>(accounts: ACCOUNTS, assets: TAssetsResponse<ASSETS>): TAccountsResponse<ASSETS, ACCOUNTS> {
+export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends Record<string, IAccount<ASSETS>>>(accounts: ACCOUNTS): TAccountsResponse<ASSETS, ACCOUNTS> {
     return Promise.all(Object.entries(accounts).map(async ([key, account]) => {
 
         const seed = account.seed || libs.crypto.randomSeed();
@@ -27,12 +27,6 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
             }, seed);
 
             await broadcastAndWait(tx);
-        }
-
-        if (account.balance) {
-            await Promise.all(Object.entries(account.balance).map(async ([name, count]) => {
-                await setBalance(address, count as number, assets[name].id);
-            }));
         }
 
         if (account.data) {

@@ -16,7 +16,7 @@ export async function write(options: IOptions) {
         .catch(() => null);
 
     const state = JSON.parse(await readFile(options.config, 'utf8'));
-    const ACCOUNTS = await createAccounts(state.ACCOUNTS || {}, {});
+    const ACCOUNTS = await createAccounts(state.ACCOUNTS || {});
     const ASSETS = await createAssets(state.ASSETS || {}, ACCOUNTS);
     await setBalances(state.ACCOUNTS || {}, ASSETS, ACCOUNTS);
     const SPONSORSHIPS = await setSponsorship(state.ASSETS || {}, ASSETS, ACCOUNTS);

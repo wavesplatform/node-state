@@ -5,7 +5,7 @@ import { broadcastAndWait } from '../utils';
 import console from '../utils/console';
 
 
-export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends Record<string, IAccount<ASSETS>>>(accounts: ACCOUNTS, assets: TAssetsResponse<ASSETS>): TAccountsResponse<ASSETS, ACCOUNTS> {
+export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends Record<string, IAccount<ASSETS>>>(accounts: ACCOUNTS): TAccountsResponse<ASSETS, ACCOUNTS> {
     return Promise.all(Object.entries(accounts).map(async ([key, account]) => {
 
         const seed = account.seed || libs.crypto.randomSeed();

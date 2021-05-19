@@ -32,6 +32,7 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
         if (account.data) {
             await Promise.all(Object.entries(account.data).map(async ([key, { type, value }]) => {
                 const tx = data({
+                    chainId: CHAIN_ID,
                     data: [{ key, type, value }]
                 } as any, seed);
 
@@ -45,7 +46,7 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
         }
 
         const { available } = await nodeInteraction.balanceDetails(address, NODE_URL);
-        const toSend = 100 * Math.pow(10, 8) - available;
+        const toSend = 100 * Math.pow(10, 8) - (+available);
 
         await setBalance(address, toSend);
 

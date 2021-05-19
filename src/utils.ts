@@ -2,6 +2,7 @@ import { broadcast, waitForTx } from '@waves/waves-transactions';
 import { NODE_URL } from './constants';
 import { ChildProcessWithoutNullStreams, spawn, SpawnOptionsWithoutStdio } from 'child_process';
 import console from './utils/console';
+import * as os from "os";
 
 
 export async function broadcastAndWait(tx: any): Promise<any> {

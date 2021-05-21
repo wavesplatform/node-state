@@ -1,5 +1,5 @@
 import { TAssetsResponse, IAsset, IAccount, TAccountsResponse } from '../interface';
-import { MASTER_ACCOUNT_SEED } from '../constants';
+import {CHAIN_ID, MASTER_ACCOUNT_SEED} from '../constants';
 import { broadcastAndWait } from '../utils';
 import { sponsorship } from '@waves/waves-transactions';
 import console from '../utils/console';
@@ -18,6 +18,7 @@ export default function <STATE_ASSETS extends Record<string, IAsset>,
         const tx = sponsorship({
             assetId: assets[key].id,
             minSponsoredAssetFee: 1,
+            chainId: CHAIN_ID,
         }, asset.owner ? accounts[asset.owner].seed : MASTER_ACCOUNT_SEED);
 
         await broadcastAndWait(tx);

@@ -1,4 +1,4 @@
-import { TTransactionFromAPIMap } from '@waves/ts-types';
+import {TransactionMap, WithId} from '@waves/ts-types';
 
 export type TLong = string | number;
 
@@ -26,7 +26,7 @@ export interface IAsset {
     sponsorship?: boolean;
 }
 
-export type TAssetsResponse<ASSETS extends Record<string, IAsset>> = { [Key in keyof ASSETS]: TTransactionFromAPIMap<TLong>[3] };
+export type TAssetsResponse<ASSETS extends Record<string, IAsset>> = { [Key in keyof ASSETS]: TransactionMap<TLong>[3] & WithId };
 export type TAccountsResponse<ASSETS extends Record<string, IAsset>, ACCOUNTS extends Record<string, IAccount<ASSETS>>> = {
     [Key in keyof ACCOUNTS]: {
         seed: string;

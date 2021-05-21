@@ -3,7 +3,6 @@ import console from './console';
 
 
 export function remove(image: string): Promise<void> {
-    console.log("=====================remove")
 
     return stats(['-a']).then(list => {
         const args = list.filter(item => item.image === image)
@@ -19,7 +18,6 @@ export function remove(image: string): Promise<void> {
 }
 
 export function stop(image: string): Promise<void> {
-    console.log("=====================stop")
 
     return stats().then(list => {
         const args = list.filter(item => item.image === image)
@@ -35,19 +33,16 @@ export function stop(image: string): Promise<void> {
 }
 
 export function isRunImage(image: string): Promise<boolean> {
-    console.log("=====================isRunImage")
     return stats().then(list => list.filter(item => item.image === image).length !== 0);
 }
 
 export function run(args: Array<string>, image: string) {
-    console.log("=====================run")
 
     return stop(image).then(() => remove(image))
         .then(() => utilsRun('docker', ['run', ...args, image]));
 }
 
 export function stats(flags: Array<'-a'> = []): Promise<Array<IImageInfo>> {
-    console.log("=====================stats")
     return exec('docker', ['ps', ...flags]).then(message => {
         return message
             .split('\n')

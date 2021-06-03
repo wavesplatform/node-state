@@ -11,8 +11,9 @@ export interface IAccount<ASSETS extends Record<string, IAsset>> {
     seed?: string | undefined;
     script?: boolean | string | undefined;
     alias?: boolean | string | undefined;
-    balance?: { [Key in keyof ASSETS]?: number };
-    data?: Record<string, { value: string | boolean | number, type: 'string' | 'boolean' | 'number' | 'binary' }>
+    balance?: { [Key in keyof ASSETS]?: TLong };
+    data?: Record<string, { value: string | boolean | number, type: 'string' | 'boolean' | 'number' | 'binary' }>;
+    lease?: {string : TLong};
 }
 
 export interface IAsset {

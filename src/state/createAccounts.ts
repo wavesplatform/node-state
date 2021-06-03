@@ -1,8 +1,9 @@
-import { IAccount, IAsset, TAccountsResponse, TAssetsResponse } from '../interface';
-import { alias, data, libs, nodeInteraction, setScript, transfer } from '@waves/waves-transactions';
+import {IAccount, IAsset, TAccountsResponse, TAssetsResponse, TLong} from '../interface';
+import { alias, data, lease, libs, nodeInteraction, setScript, transfer } from '@waves/waves-transactions';
 import { ACCOUNT_SCRIPT, CHAIN_ID, DAP_SCRIPT, MASTER_ACCOUNT_SEED, NODE_URL } from '../constants';
 import { broadcastAndWait } from '../utils';
 import console from '../utils/console';
+import {ILeaseParams} from "@waves/waves-transactions/dist/transactions";
 
 
 export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends Record<string, IAccount<ASSETS>>>(accounts: ACCOUNTS): TAccountsResponse<ASSETS, ACCOUNTS> {
@@ -45,9 +46,17 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
             await addScript(seed, script);
         }
 
+        if (account.lease) {
+            const randomAddress = libs.crypto.address(libs.crypto.randomSeed(), CHAIN_ID);
+            const amount = 1 * Math.pow(10, 8);
+            setLeasing(randomAddress, amount);
+        }
+        console.log("====lease set")
+
         const { available } = await nodeInteraction.balanceDetails(address, NODE_URL);
         const toSend = 100 * Math.pow(10, 8) - (+available);
 
+        console.log("====balance set")
         await setBalance(address, toSend);
 
         return {
@@ -56,7 +65,8 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
                 alias: userAlias,
                 address, publicKey,
                 scripted: !!account.script,
-                data: account.data
+                data: account.data,
+                lease: account.lease
             }
         };
     }))
@@ -73,6 +83,17 @@ async function setBalance(recipient: string, amount: number, assetId?: string | 
     }, MASTER_ACCOUNT_SEED);
 
     await broadcastAndWait(balanceTx);
+}
+
+async function setLeasing(recipient: string, amount: TLong) {
+    const leaseTx = lease({
+        chainId: CHAIN_ID,
+        recipient,
+        amount,
+        additionalFee: 0.004 * Math.pow(10, 8)
+    }, MASTER_ACCOUNT_SEED);
+
+    await broadcastAndWait(leaseTx);
 }
 
 async function addScript(seed: string, script: string) {

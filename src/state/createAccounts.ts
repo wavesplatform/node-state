@@ -3,7 +3,6 @@ import { alias, data, lease, libs, nodeInteraction, setScript, transfer } from '
 import { ACCOUNT_SCRIPT, CHAIN_ID, DAP_SCRIPT, MASTER_ACCOUNT_SEED, NODE_URL } from '../constants';
 import { broadcastAndWait } from '../utils';
 import console from '../utils/console';
-import {ILeaseParams} from "@waves/waves-transactions/dist/transactions";
 
 
 export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends Record<string, IAccount<ASSETS>>>(accounts: ACCOUNTS): TAccountsResponse<ASSETS, ACCOUNTS> {
@@ -48,15 +47,13 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
 
         if (account.lease) {
             const randomAddress = libs.crypto.address(libs.crypto.randomSeed(), CHAIN_ID);
-            const amount = 1 * Math.pow(10, 8);
-            setLeasing(randomAddress, amount);
+            const amount = Math.pow(10, 8);
+            await setLeasing(randomAddress, amount);
         }
-        console.log("====lease set")
 
         const { available } = await nodeInteraction.balanceDetails(address, NODE_URL);
         const toSend = 100 * Math.pow(10, 8) - (+available);
 
-        console.log("====balance set")
         await setBalance(address, toSend);
 
         return {

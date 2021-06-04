@@ -1,6 +1,6 @@
 {
   "name": "@waves/node-state",
-  "version": "0.0.9",
+  "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "bin": {
@@ -31,12 +31,12 @@
     "@types/cli-color": "^0.3.29",
     "@types/dotenv": "^8.2.0",
     "@types/fs-extra": "^8.0.1",
-    "@types/yargs": "^13.0.3",
+    "@types/yargs": "^16.0.3",
     "@waves/ts-types": "1.0.2",
     "@waves/waves-transactions": "^4.1.8",
     "cli-color": "^2.0.0",
     "dotenv": "^8.2.0",
     "fs-extra": "^8.1.0",
-    "yargs": "^14.2.0"
+    "yargs": "^17.0.1"
   }
 }

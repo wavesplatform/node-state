@@ -37,7 +37,7 @@ const data = options({
     verbose: {
         type: 'boolean'
     }
-}).argv;
+}).parseSync();
 
 export const out = data.out;
 export const config = data.config;

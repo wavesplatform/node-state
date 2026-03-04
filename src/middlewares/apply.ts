@@ -14,16 +14,25 @@ export default async (ctx: any, next: any) => {
   
   if (!runTests) {
     return next();
-  } else {
-    // TODO add check test command
-    const child = runCommand('npm', ['run', 'testCommand'], {
-      log: console.warn,
-    });
-
-    child.on('exit', code => {
-      process.exit(code || 0);
-    });
-
-    next();
   }
+
+  const npmExecPath = process.env.npm_execpath;
+  const command = npmExecPath ? process.execPath : process.platform === 'win32' ? 'npm.cmd' : 'npm';
+  const args = npmExecPath ? [npmExecPath, 'run', 'testCommand'] : ['run', 'testCommand'];
+
+  // TODO add check test command
+  const child = runCommand(command, args, {
+    log: console.warn,
+  });
+
+  const exitCode = await new Promise<number>((resolve, reject) => {
+    child.on('exit', code => resolve(code || 0));
+    child.on('error', reject);
+  });
+
+  if (exitCode !== 0) {
+    process.exitCode = exitCode;
+  }
+
+  return next();
 };

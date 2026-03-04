@@ -20,7 +20,7 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^3.9.4"
+    "typescript": "^5.9.2"
   },
   "files": [
     "dist",
@@ -28,15 +28,15 @@
     "config.json"
   ],
   "dependencies": {
-    "@types/cli-color": "^0.3.29",
+    "@types/cli-color": "^2.0.6",
     "@types/dotenv": "^8.2.0",
-    "@types/fs-extra": "^8.0.1",
-    "@types/yargs": "^16.0.3",
-    "@waves/ts-types": "1.0.2",
-    "@waves/waves-transactions": "^4.1.8",
-    "cli-color": "^2.0.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/yargs": "^17.0.35",
+    "@waves/ts-types": "file:../ts-types",
+    "@waves/waves-transactions": "file:../waves-transactions",
+    "cli-color": "^2.0.4",
     "dotenv": "^8.2.0",
-    "fs-extra": "^8.1.0",
-    "yargs": "^17.0.1"
+    "fs-extra": "^11.0.4",
+    "yargs": "^17.0.35"
   }
 }

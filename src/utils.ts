@@ -10,7 +10,8 @@ export async function broadcastAndWait(tx: any): Promise<any> {
         await broadcast(tx, NODE_URL);
         await waitForTx(tx.id, { apiBase: NODE_URL });
     } catch (e) {
-        console.error(`Can't send transaction! ${JSON.stringify(tx, null, 4)}` + '\n' + `Error: ${e.message}`);
+        const message = e instanceof Error ? e.message : String(e);
+        console.error(`Can't send transaction! ${JSON.stringify(tx, null, 4)}` + '\n' + `Error: ${message}`);
     }
 }
 
@@ -28,6 +29,10 @@ export const run = (command: string, args: Array<string>, options?: { log?: TFun
 
     process.stderr.on('data', data => {
         error(data);
+    });
+
+    process.on('error', err => {
+        error(err);
     });
 
     process.on('close', (code) => {

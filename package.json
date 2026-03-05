@@ -7,8 +7,8 @@
     "node-state": "dist/cli.js"
   },
   "scripts": {
-    "prepare": "tsc",
-    "postversion": "npm publish"
+    "prepare": "npx tsc",
+    "build": "npm run prepare"
   },
   "author": {
     "email": "tsddaniil@gmail.com",

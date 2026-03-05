@@ -15,7 +15,7 @@
     "name": "Tsigel"
   },
   "repository": {
-    "url": "https://github.com/wavesplatform/node-state",
+    "url": "https://github.com/wavesplatform/node-state.git",
     "type": "git"
   },
   "license": "ISC",

@@ -1,14 +1,15 @@
-import { broadcast, waitForTx } from '@waves/waves-transactions';
+
 import { NODE_URL } from './constants';
 import { ChildProcessWithoutNullStreams, spawn, SpawnOptionsWithoutStdio } from 'child_process';
+import { broadcast } from '@waves/node-api-js/cjs/api-node/transactions';
+import waitTx from '@waves/node-api-js/cjs/tools/transactions/wait';
 import console from './utils/console';
-import * as os from "os";
 
 
 export async function broadcastAndWait(tx: any): Promise<any> {
     try {
-        await broadcast(tx, NODE_URL);
-        await waitForTx(tx.id, { apiBase: NODE_URL });
+        const broadcastedTx = await broadcast(NODE_URL, tx);
+        await waitTx(NODE_URL, broadcastedTx);
     } catch (e) {
         const message = e instanceof Error ? e.message : String(e);
         console.error(`Can't send transaction! ${JSON.stringify(tx, null, 4)}` + '\n' + `Error: ${message}`);

@@ -1,5 +1,6 @@
-import {IAccount, IAsset, TAccountsResponse, TAssetsResponse, TLong} from '../interface';
-import { alias, data, lease, libs, nodeInteraction, setScript, transfer } from '@waves/waves-transactions';
+import {IAccount, IAsset, TAccountsResponse, TLong} from '../interface';
+import { alias, data, lease, libs, setScript, transfer } from '@waves/waves-transactions';
+import { fetchBalanceDetails } from '@waves/node-api-js/cjs/api-node/addresses';
 import { ACCOUNT_SCRIPT, CHAIN_ID, DAP_SCRIPT, MASTER_ACCOUNT_SEED, NODE_URL } from '../constants';
 import { broadcastAndWait } from '../utils';
 import console from '../utils/console';
@@ -51,7 +52,7 @@ export default function <ASSETS extends Record<string, IAsset>, ACCOUNTS extends
             await setLeasing(randomAddress, amount);
         }
 
-        const { available } = await nodeInteraction.balanceDetails(address, NODE_URL);
+        const { available } = await fetchBalanceDetails(NODE_URL, address);
         const toSend = 100 * Math.pow(10, 8) - (+available);
 
         await setBalance(address, toSend);

@@ -24,16 +24,21 @@ export default async (ctx: any, next: any) => {
         NODE_IMAGE
     );
 
-    await new Promise(resolve => {
-        node.stdout.on('data', chunk => {
-            const message = String(chunk);
-            if (message.includes('REST API was bound')) {
-                console.info('REST API was bound');
-                resolve();
-            }
+    try {
+        await new Promise<void>(resolve => {
+            node.stdout.on('data', chunk => {
+                const message = String(chunk);
+                if (message.includes('REST API was bound')) {
+                    console.info('REST API was bound');
+                    resolve();
+                }
+            });
         });
-    });
 
-    next();
+        await next();
+    } finally {
+        await stop(NODE_IMAGE);
+        await remove(NODE_IMAGE);
+    }
 
 };

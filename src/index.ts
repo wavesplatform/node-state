@@ -1,5 +1,6 @@
-import { outputFile, readFile } from 'fs-extra';
-import { alias, broadcast, libs } from '@waves/waves-transactions';
+import { outputFile, readJson } from 'fs-extra';
+import { alias, libs } from '@waves/waves-transactions';
+import { broadcast } from '@waves/node-api-js/cjs/api-node/transactions';
 import { ACCOUNT_SCRIPT, CHAIN_ID, DAP_SCRIPT, MASTER_ACCOUNT_SEED, NODE_URL, SMART_ASSET_SCRIPT } from './constants';
 import createAssets from './state/createAssets';
 import createAccounts from './state/createAccounts';
@@ -9,13 +10,13 @@ import setBalances from './state/setBalances';
 
 
 export async function write(options: IOptions) {
-    broadcast(alias({
+    broadcast(NODE_URL, alias({
         alias: 'master',
         chainId: CHAIN_ID
-    }, MASTER_ACCOUNT_SEED), NODE_URL)
+    }, MASTER_ACCOUNT_SEED))
         .catch(() => null);
 
-    const state = JSON.parse(await readFile(options.config, 'utf8'));
+    const state = await readJson(options.config);
     const ACCOUNTS = await createAccounts(state.ACCOUNTS || {});
     const ASSETS = await createAssets(state.ASSETS || {}, ACCOUNTS);
     await setBalances(state.ACCOUNTS || {}, ASSETS, ACCOUNTS);

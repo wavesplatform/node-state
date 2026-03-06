@@ -9,12 +9,12 @@ const checkDockerNetworkCommand = [
 ].join(' ');
 
 export default async (ctx: any, next: any) => {
-  await new Promise(resolve => {
+  await new Promise<void>(resolve => {
     exec(checkDockerNetworkCommand, () => {
       console.log('Docker network created (or reused): ', DOCKER_NETWORK);
       resolve();
     });
   });
 
-  next();
+  await next();
 };

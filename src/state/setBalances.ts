@@ -1,4 +1,4 @@
-import { alias, data, libs, nodeInteraction, setScript, transfer } from '@waves/waves-transactions';
+import { transfer } from '@waves/waves-transactions';
 import { MASTER_ACCOUNT_SEED } from '../constants';
 import { broadcastAndWait } from '../utils';
 import { IAccount, IAsset, TAccountsResponse, TAssetsResponse } from '../interface';

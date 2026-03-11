@@ -11,7 +11,6 @@ jobs:
     with:
       environment: NPMJS
       event_name: ${{ github.event_name }}
-      test: true
       version: ${{ github.event.release.tag_name }}
     permissions:
       id-token: write

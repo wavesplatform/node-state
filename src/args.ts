@@ -36,6 +36,11 @@ const data = options({
     },
     verbose: {
         type: 'boolean'
+    },
+    image: {
+        type: 'string',
+        alias: 'i',
+        default: 'wavesplatform/waves-private-node'
     }
 }).parseSync();
 
@@ -43,5 +48,6 @@ export const out = data.out;
 export const config = data.config;
 export const mode = data.mode as 'json' | 'typescript';
 export const upNode = data.upNode;
-export const runTests = data.runTests;
+export const runTests = data.runTests
+export const image = data.image
 console.level = data.verbose ? 'verbose' : 'errors';

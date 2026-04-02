@@ -11,13 +11,14 @@
 
 ```bash
 Options:
-  --help          Show help                                            [boolean]
-  --version       Show version number                                  [boolean]
-  --out, -o       Out of result                              [string] [required]
-  --config, -c    Path to config file                                   [string]
-  --mode, -m      Compile mode [choices: "json", "typescript"] [default: "json"]
-  --node, -n      Need up node (port 6869)                             [boolean]
-  --explorer, -e  Need up explorer (port 3000)                         [boolean]
+  --help          Show help                                                [boolean]
+  --version       Show version number                                      [boolean]
+  --out, -o       Out of result                                  [string] [required]
+  --config, -c    Path to config file                                       [string]
+  --mode, -m      Compile mode     [choices: "json", "typescript"] [default: "json"]
+  --node, -n      Need up node (port 6869)                                 [boolean]
+  --explorer, -e  Need up explorer (port 3000)                             [boolean]
+  --image, -i     Node image, [string] [default: "wavesplatform/waves-private-node"]
 ```
 
 ### Usage example
